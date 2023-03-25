@@ -5,6 +5,7 @@ import { Container, Hero, Preview } from './styles'
 
 import calendarImg from '../../assets/calendar.png'
 import bgHero from '../../assets/bg-hero.png'
+import { ClaimUsernameForm } from './components/ClaimUsernameForm'
 
 export default function Home() {
   return (
@@ -25,6 +26,7 @@ export default function Home() {
             Conecte seu calendário e permita que as pessoas marquem agendamentos
             no seu tempo livre.
           </Text>
+          <ClaimUsernameForm />
         </Hero>
         <Preview>
           <Image
