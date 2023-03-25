@@ -1,4 +1,6 @@
-import Head from 'next/head'
+import Head from "next/head";
+import { Heading, Text } from "@ui-ignite/react";
+
 export default function Home() {
   return (
     <>
@@ -9,8 +11,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Hello World!</h1>
+        <Heading as="h1">Hello World!</Heading>
+        <Text>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit
+          reprehenderit alias esse, quibusdam laboriosam ratione dolorum minus
+          molestias velit ex earum fuga incidunt, nulla culpa quaerat illo unde
+          dolorem enim!
+        </Text>
       </main>
     </>
-  )
+  );
 }
