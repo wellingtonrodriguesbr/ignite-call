@@ -8,7 +8,6 @@ export const Container = styled('div', {
   alignItems: 'center',
   justifyContent: 'center',
   gap: '$20',
-  overflow: 'hidden',
 
   img: {
     zIndex: -1,
@@ -31,6 +30,7 @@ export const Hero = styled('div', {
 })
 export const Preview = styled('div', {
   paddingRight: '$8',
+  overflow: 'hidden',
 
   '@media(max-width: 600px)': {
     display: 'none',
