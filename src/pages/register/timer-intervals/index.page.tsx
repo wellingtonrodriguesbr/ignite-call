@@ -17,7 +17,7 @@ import {
 } from './styles'
 import { ArrowRight } from '@phosphor-icons/react'
 import { z } from 'zod'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { getWeekDays } from '@/utils/get-week-days'
 
 const timerIntervalsFormSchema = z.object({})
@@ -26,6 +26,7 @@ export default function TimerInternvals() {
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { isSubmitting, errors },
   } = useForm({
@@ -47,6 +48,7 @@ export default function TimerInternvals() {
     name: 'intervals',
   })
 
+  const intervals = watch('intervals')
   const weekDays = getWeekDays()
 
   async function handleSetTimeIntervals() {}
@@ -73,18 +75,31 @@ export default function TimerInternvals() {
             {fields.map((field, index) => (
               <IntervalItem key={field.id}>
                 <IntervalDay>
-                  <Checkbox />
+                  <Controller
+                    name={`intervals.${index}.enabled`}
+                    control={control}
+                    render={({ field }) => (
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={(checked) =>
+                          field.onChange(checked === true)
+                        }
+                      />
+                    )}
+                  />
                   <Text>{weekDays[field.weekDay]}</Text>
                 </IntervalDay>
                 <IntervalInputs>
                   <TextInput
                     type="time"
                     step={60}
+                    disabled={intervals[index].enabled === false}
                     {...register(`intervals.${index}.startTime`)}
                   />
                   <TextInput
                     type="time"
                     step={60}
+                    disabled={intervals[index].enabled === false}
                     {...register(`intervals.${index}.endTime`)}
                   />
                 </IntervalInputs>
