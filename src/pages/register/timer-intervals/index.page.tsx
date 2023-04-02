@@ -22,6 +22,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { getWeekDays } from '@/utils/get-week-days'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minutes'
+import { api } from '@/lib/axios'
 
 const timerIntervalsFormSchema = z.object({
   intervals: z
@@ -38,18 +39,18 @@ const timerIntervalsFormSchema = z.object({
     .refine((intervals) => intervals.length > 0, {
       message: 'Você precisa selecionar pelo menos um dia da semana!',
     })
-    .transform((intervals) =>
-      intervals.map((interval) => {
+    .transform((intervals) => {
+      return intervals.map((interval) => {
         return {
           weekDay: interval.weekDay,
           startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
           endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
         }
-      }),
-    )
+      })
+    })
     .refine(
       (intervals) => {
-        intervals.every(
+        return intervals.every(
           (interval) =>
             interval.endTimeInMinutes - 60 >= interval.startTimeInMinutes,
         )
@@ -95,8 +96,8 @@ export default function TimerInternvals() {
   const weekDays = getWeekDays()
 
   async function handleSetTimeIntervals(data: any) {
-    const formData = data as TimerIntervalsFormOutput
-    console.log(formData)
+    const { intervals } = data as TimerIntervalsFormOutput
+    await api.post('/users/timer-intervals', { intervals })
   }
   return (
     <>
