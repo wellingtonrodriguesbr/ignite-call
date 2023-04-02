@@ -9,6 +9,7 @@ import {
 } from '@ui-ignite/react'
 import { Container, Header } from '../styles'
 import {
+  FormError,
   IntervalBox,
   IntervalContainer,
   IntervalDay,
@@ -19,8 +20,26 @@ import { ArrowRight } from '@phosphor-icons/react'
 import { z } from 'zod'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { getWeekDays } from '@/utils/get-week-days'
+import { zodResolver } from '@hookform/resolvers/zod'
 
-const timerIntervalsFormSchema = z.object({})
+const timerIntervalsFormSchema = z.object({
+  intervals: z
+    .array(
+      z.object({
+        weekDay: z.number().min(0).max(6),
+        enabled: z.boolean(),
+        startTime: z.string(),
+        endTime: z.string(),
+      }),
+    )
+    .length(7)
+    .transform((intervals) => intervals.filter((interval) => interval.enabled))
+    .refine((intervals) => intervals.length > 0, {
+      message: 'Você precisa selecionar pelo menos um dia da semana!',
+    }),
+})
+
+type TimerIntervalsFormSchema = z.infer<typeof timerIntervalsFormSchema>
 
 export default function TimerInternvals() {
   const {
@@ -30,6 +49,7 @@ export default function TimerInternvals() {
     control,
     formState: { isSubmitting, errors },
   } = useForm({
+    resolver: zodResolver(timerIntervalsFormSchema),
     defaultValues: {
       intervals: [
         { weekDay: 0, enabled: false, startTime: '08:00', endTime: '18:00' },
@@ -51,7 +71,7 @@ export default function TimerInternvals() {
   const intervals = watch('intervals')
   const weekDays = getWeekDays()
 
-  async function handleSetTimeIntervals() {}
+  async function handleSetTimeIntervals(data: TimerIntervalsFormSchema) {}
   return (
     <>
       <Head>
@@ -107,7 +127,11 @@ export default function TimerInternvals() {
             ))}
           </IntervalContainer>
 
-          <Button type="submit">
+          {errors.intervals ? (
+            <FormError size="sm">{errors.intervals.message}</FormError>
+          ) : null}
+
+          <Button type="submit" disabled={isSubmitting}>
             Próximo passo
             <ArrowRight />
           </Button>
