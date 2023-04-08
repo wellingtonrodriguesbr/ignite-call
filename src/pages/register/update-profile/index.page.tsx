@@ -1,5 +1,12 @@
 import Head from 'next/head'
-import { Button, Heading, MultiStep, Text, TextArea } from '@ui-ignite/react'
+import {
+  Avatar,
+  Button,
+  Heading,
+  MultiStep,
+  Text,
+  TextArea,
+} from '@ui-ignite/react'
 import { Container, Header } from '../styles'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -41,7 +48,7 @@ export default function UpdateProfile() {
       </Head>
       <Container>
         <Header>
-          <Heading as="strong">Bem-vindo ao Ignite Call!</Heading>
+          <Heading as="strong">Ufa! Última etapa do cadastro</Heading>
           <Text>Por último, uma breve descrição e uma foto de perfil.</Text>
 
           <MultiStep size={4} currentStep={4} />
@@ -49,6 +56,10 @@ export default function UpdateProfile() {
         <ProfileBox as="form" onSubmit={handleSubmit(handleUpdateProfile)}>
           <label>
             <Text size="sm">Foto de perfil</Text>
+            <Avatar
+              src={session.data?.user.avatar_url}
+              alt={session.data?.user.name}
+            />
           </label>
 
           <label>
