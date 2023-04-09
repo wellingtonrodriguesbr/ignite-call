@@ -17,6 +17,8 @@ import { GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '@/pages/api/auth/[...nextauth].api'
 import { useSession } from 'next-auth/react'
+import { api } from '@/lib/axios'
+import { useRouter } from 'next/router'
 
 const updateProfileSchema = z.object({
   bio: z.string(),
@@ -34,9 +36,15 @@ export default function UpdateProfile() {
   })
 
   const session = useSession()
-  console.log(session)
+  const router = useRouter()
 
-  async function handleUpdateProfile(data: updateProfileData) {}
+  async function handleUpdateProfile(data: updateProfileData) {
+    await api.put('/users/profile', {
+      bio: data.bio,
+    })
+
+    await router.push(`/schedule/${session.data?.user.username}`)
+  }
 
   return (
     <>
@@ -49,7 +57,7 @@ export default function UpdateProfile() {
       <Container>
         <Header>
           <Heading as="strong">Ufa! Última etapa do cadastro</Heading>
-          <Text>Por último, uma breve descrição e uma foto de perfil.</Text>
+          <Text>Por último, uma breve descrição.</Text>
 
           <MultiStep size={4} currentStep={4} />
         </Header>
