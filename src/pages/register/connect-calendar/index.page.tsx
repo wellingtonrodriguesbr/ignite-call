@@ -12,6 +12,10 @@ export default function ConnectCalendar() {
   const hasAuthError = !!router.query.error
   const isSignedIn = session.status === 'authenticated'
 
+  async function handleNavigateToNextStep() {
+    await router.push('/register/timer-intervals')
+  }
+
   return (
     <>
       <Head>
@@ -53,7 +57,11 @@ export default function ConnectCalendar() {
               permissões de acesso ao Google Calendar
             </AuthError>
           ) : null}
-          <Button disabled={!isSignedIn}>
+          <Button
+            type="submit"
+            onClick={handleNavigateToNextStep}
+            disabled={!isSignedIn}
+          >
             Próximo passo
             <ArrowRight />
           </Button>
