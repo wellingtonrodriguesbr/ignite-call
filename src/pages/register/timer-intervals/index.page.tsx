@@ -94,7 +94,7 @@ export default function TimerInternvals() {
   })
 
   const intervals = watch('intervals')
-  const weekDays = getWeekDays()
+  const weekDays = getWeekDays({ short: false })
   const router = useRouter()
 
   async function handleSetTimeIntervals(data: any) {
