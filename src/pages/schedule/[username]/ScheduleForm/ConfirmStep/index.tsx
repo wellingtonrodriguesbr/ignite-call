@@ -46,7 +46,7 @@ export function ConfirmStep({
       observations,
       date: schedulingDate,
     })
-
+    alert('Evento criado com sucesso!')
     onCancelConfirmation()
   }
 
